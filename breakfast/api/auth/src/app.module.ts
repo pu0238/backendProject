@@ -6,38 +6,26 @@ import { UserService } from './user/user.service';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './user/user.entity';
-import * as dotenv from 'dotenv';
-
-dotenv.config();
-const nodeEnvironment = getEnv('NODE_ENV').toUpperCase();
-
-function getEnv(envName: string): string {
-  const value = process.env[envName];
-  if (value) {
-    return value;
-  } else {
-    throw `Could not find environment variable: ${envName}`;
-  }
-}
+import { PostModule } from './post/post.module';
+import { PostService } from './post/post.service';
+import { default as config } from '../ormconfig';
+import { BlogModule } from './blog/blog.module';
+import { CommentModule } from './comment/comment.module';
+import { CommentService } from './comment/comment.service';
+import { RankModule } from './rank/rank.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env' }),
     AuthModule,
     UserModule,
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: getEnv(`${nodeEnvironment}_DATABASE_HOST`),
-      port: parseInt(getEnv(`${nodeEnvironment}_DATABASE_PORT`)) ?? 3306,
-      username: getEnv(`${nodeEnvironment}_DATABASE_USER`),
-      password: getEnv(`${nodeEnvironment}_DATABASE_PASSWORD`),
-      database: getEnv(`${nodeEnvironment}_DATABASE_NAME`),
-      entities: [User],
-      synchronize: nodeEnvironment === "DEVELOPMENT" ? true : false,
-    }),
+    PostModule,
+    CommentModule,
+    TypeOrmModule.forRoot(config),
+    BlogModule,
+    RankModule,
   ],
   controllers: [AppController],
-  providers: [AppService, UserService],
+  providers: [AppService, UserService, PostService, CommentService],
 })
 export class AppModule {}

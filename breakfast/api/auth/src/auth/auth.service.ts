@@ -5,11 +5,14 @@ import { UserService } from '../user/user.service';
 import { SingInValidator } from './dto';
 import { accessToken } from './interfaces/auth.accessToken';
 import { randomBytes, createHash } from 'crypto';
+import { Rank } from '../rank/rank.entity';
+import { RankService } from '../rank/rank.service';
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private rankService: RankService,
   ) {}
 
   validateEmail(email: string): boolean {
@@ -38,11 +41,13 @@ export class AuthService {
     usernameOrEmail: string,
   ): Promise<User | undefined> {
     if (this.validateEmail(usernameOrEmail)) {
-      const email = usernameOrEmail;
-      return await this.userService.findOne({ email });
+      return await this.userService.findOne({ email: usernameOrEmail }, {
+        relations: ['rank'],
+      });
     }
-    const username = usernameOrEmail;
-    return await this.userService.findOne({ username });
+    return await this.userService.findOne({ username: usernameOrEmail }, {
+      relations: ['rank'],
+    });
   }
 
   async validateUser(
@@ -58,14 +63,14 @@ export class AuthService {
     return null;
   }
 
-  async singIn(body: SingInValidator): Promise<accessToken> {
+  async singIn(body: SingInValidator, rank?: Rank): Promise<accessToken> {
     const user: User = {
       username: body.username,
       email: body.email,
       password: body.password,
       salt: null,
     };
-
+    if (!rank) rank = { rank: 'user' };
     if (!this.validatePassword(user.password))
       throw new ConflictException(
         'Password does not contain a number or a special character',
@@ -81,15 +86,25 @@ export class AuthService {
     user.salt = randomBytes(16).toString('hex');
     user.password = this.saltAndHash(user.password, user.salt);
 
-    await this.userService.insert(user);
+    const rankUser: Rank = await this.rankService.findOne(rank);
+    // If error add user rank
+    const insertRntity = { ...user, rank: rankUser };
+    await this.userService.insert(insertRntity);
 
-    const { password, salt, ...result } = user;
+    const { password, salt, ...result } = insertRntity;
     return this.logIn(result);
   }
 
   async logIn(user: User): Promise<accessToken> {
-    const payload = { id: user.id, username: user.username, };
+    const payload = {
+      id: user.id,
+      username: user.username,
+      rank: user.rank.rank,
+      permissionsLvl: user.rank.permissionsLvl,
+    };
     return {
+      message: 'success',
+      statusCode: 200,
       accessToken: this.jwtService.sign(payload),
     };
   }

@@ -6,6 +6,7 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
+import { User } from '../user/user.entity';
 import { AuthService } from './auth.service';
 import { SingInValidator } from './dto';
 import { JwtAuthGuard } from './guards/jwt.guard';
@@ -31,7 +32,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('protected')
-  protected(@Request() req): Promise<any> {
+  protected(@Request() req): Promise<User> {
     return req.user;
   }
 }

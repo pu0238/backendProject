@@ -1,3 +1,5 @@
 export interface accessToken {
-    accessToken: string;
+  message?: string;
+  statusCode?: number;
+  accessToken: string;
 }

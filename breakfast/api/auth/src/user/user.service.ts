@@ -14,8 +14,8 @@ export class UserService {
     return this.usersRepository.find();
   }
 
-  findOne(arg: any): Promise<User> {
-    return this.usersRepository.findOne(arg);
+  findOne(arg: any, options?: any): Promise<User> {
+    return this.usersRepository.findOne(arg, options);
   }
 
   insert(user: User): Promise<InsertResult> {
