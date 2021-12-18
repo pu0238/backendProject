@@ -21,7 +21,7 @@ dotenv.config();
       useFactory: async (configService: ConfigService) => {
         return {
           secret: configService.get<string>('JWT_SECRET'),
-          signOptions: { expiresIn: "10m" }
+          signOptions: { expiresIn: configService.get<string>('JWT_DURATION') }
         };
       },
       inject: [ConfigService],
