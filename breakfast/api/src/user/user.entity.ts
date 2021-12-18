@@ -8,6 +8,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
+import { PersonalData } from '../personal/personal.entity';
 
 @Entity()
 export class User {
@@ -24,6 +25,10 @@ export class User {
   @JoinColumn()
   rank?: Rank;
 
+  @ManyToOne(() => PersonalData, (personal) => personal.id)
+  @JoinColumn()
+  personalData?: PersonalData;
+
   @Column({ type: 'varchar', length: 64, nullable: false })
   password?: string;
 
@@ -36,7 +41,3 @@ export class User {
   @UpdateDateColumn()
   updatedDate?: Date;
 }
-function MenyToOne(arg0: () => typeof Rank, arg1: (rank: any) => any, arg2: { nullable: boolean; }) {
-  throw new Error('Function not implemented.');
-}
-

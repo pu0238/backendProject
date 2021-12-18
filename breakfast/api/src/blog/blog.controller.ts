@@ -17,7 +17,6 @@ import { AddBlogValidator } from './dto/blog.addBlog.dto';
 import { EditBlogValidator } from './dto/blog.editBlog.dto copy';
 import { UUID } from './dto/blog.uuid.dto';
 import { CommentValidator } from './dto/blog.comment.dto';
-import { BlogUserService } from './user/blogUser.service';
 import { BlogCommentService } from './comment/blogComment.service';
 import { Comment } from '../comment/comment.entity';
 
@@ -25,7 +24,6 @@ import { Comment } from '../comment/comment.entity';
 export class BlogController {
   constructor(
     private readonly blogService: BlogService,
-    private readonly blogUserService: BlogUserService,
     private readonly blogCommentService: BlogCommentService,
   ) {}
 
@@ -61,11 +59,6 @@ export class BlogController {
   @Get()
   getAllBlogs(): Promise<PostEntity[]> {
     return this.blogService.getAllBlogs();
-  }
-
-  @Get('user/:id')
-  getAllUserBlogs(@Param() param: UUID): Promise<PostEntity[]> {
-    return this.blogUserService.getAllUserBlogs(param.id);
   }
 
   @UseGuards(JwtAuthGuard)

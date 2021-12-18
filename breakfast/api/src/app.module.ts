@@ -13,6 +13,7 @@ import { BlogModule } from './blog/blog.module';
 import { CommentModule } from './comment/comment.module';
 import { CommentService } from './comment/comment.service';
 import { RankModule } from './rank/rank.module';
+import { PersonalModule } from './personal/personal.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { RankModule } from './rank/rank.module';
     TypeOrmModule.forRoot(config),
     BlogModule,
     RankModule,
+    PersonalModule,
   ],
   controllers: [AppController],
   providers: [AppService, UserService, PostService, CommentService],

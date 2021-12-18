@@ -1,0 +1,32 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { InsertResult, Repository } from 'typeorm';
+import { PersonalData } from './personal.entity';
+
+@Injectable()
+export class PersonalService {
+    constructor(
+        @InjectRepository(PersonalData)
+        private usersRepository: Repository<PersonalData>,
+      ) {}
+    
+      findAll(): Promise<PersonalData[]> {
+        return this.usersRepository.find();
+      }
+    
+      findOne(arg: any, options?: any): Promise<PersonalData> {
+        return this.usersRepository.findOne(arg, options);
+      }
+    
+      insert(user: PersonalData): Promise<InsertResult> {
+        return this.usersRepository.insert(user);
+      }
+
+      find(arg: any): Promise<PersonalData[]> {
+        return this.usersRepository.find(arg);
+      }
+    
+      async remove(id: string): Promise<void> {
+        await this.usersRepository.delete(id);
+      }
+}

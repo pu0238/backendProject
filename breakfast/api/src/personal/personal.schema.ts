@@ -1,0 +1,26 @@
+import { EntitySchema } from 'typeorm';
+import { PersonalData } from './personal.entity';
+
+export const PersonalSchema = new EntitySchema<PersonalData>({
+  name: 'PersonalData',
+  target: PersonalData,
+  columns: {
+    id: {
+      type: Number,
+      primary: true,
+      generated: true,
+    },
+    name: {
+      type: String,
+    },
+    lastName: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    birthDate: {
+      type: String,
+    },
+  },
+});

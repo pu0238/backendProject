@@ -4,6 +4,7 @@ import { User } from './src/user/user.entity';
 import { Comment } from './src/comment/comment.entity';
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
 import { Rank } from './src/rank/rank.entity';
+import { PersonalData } from './src/personal/personal.entity';
 
 const nodeEnvironment = getEnv('NODE_ENV').toUpperCase();
 const config: MysqlConnectionOptions = {
@@ -13,7 +14,7 @@ const config: MysqlConnectionOptions = {
   username: getEnv(`${nodeEnvironment}_DATABASE_USER`),
   password: getEnv(`${nodeEnvironment}_DATABASE_PASSWORD`),
   database: getEnv(`${nodeEnvironment}_DATABASE_NAME`),
-  entities: [User, Post, Comment, Rank],
+  entities: [User, Post, Comment, Rank, PersonalData],
   migrationsTableName: 'custom_migration_table',
   migrations: ['dist/migration/*{.ts,.js}'],
   cli: {
