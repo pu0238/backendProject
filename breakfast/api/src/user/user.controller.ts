@@ -6,10 +6,8 @@ import {
   Post,
   UseGuards,
   Request,
-  Put,
   Delete,
 } from '@nestjs/common';
-import { CommentValidator } from '../blog/dto/blog.comment.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { UUID } from '../blog/dto/blog.uuid.dto';
 import { BlogUserService } from '../blog/user/blogUser.service';
@@ -17,6 +15,7 @@ import { Post as PostEntity } from '../post/post.entity';
 import { UserAddDataValidator } from './dto/user.addData.dto';
 import { standardRes } from '../res/interface/standardRes.interface';
 import { User } from './user.entity';
+import { PersonalData } from 'src/personal/personal.entity';
 
 @Controller('user')
 export class UserController {
@@ -44,4 +43,11 @@ export class UserController {
   deleteUserData(@Param() param: UUID, @Request() req: any): Promise<standardRes> {
     return this.blogUserService.deleteUserData(param.id, req.user);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('self/data')
+  getUserSelfData(@Request() req: any): Promise<User> {
+    return this.blogUserService.getUserSelfData(req.user);
+  }
+
 }

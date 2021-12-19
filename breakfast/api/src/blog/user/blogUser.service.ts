@@ -31,13 +31,11 @@ export class BlogUserService {
       birthDate: new Date(data.birthDate),
     };
     const findedUser = await this.userService.findOne({
-      user,
-      relations: ['personalData'],
+      id: user.id,
     });
     if (!findedUser) throw new ConflictException('User not found');
     if (user.id != findedUser.id)
       throw new ConflictException('You can not add data for this user');
-    console.log(findedUser);
     if (findedUser.personalData)
       return this.updateUserData(personalData, findedUser);
     else {
@@ -76,5 +74,14 @@ export class BlogUserService {
     if (user.id != id) throw new ConflictException('You cannot get this data');
     await this.personalService.remove(id);
     return { message: 'success', statusCode: 200 };
+  }
+
+  async getUserSelfData (user: User): Promise<User>{
+    const findedUser = await this.userService.findOne({
+      id: user.id,
+      relations: ['personalData', 'rank'],
+    });
+    const { password, salt, ...result } = findedUser;
+    return result
   }
 }

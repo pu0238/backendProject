@@ -4,7 +4,7 @@ import { Post } from '../post/post.entity';
 import { PostService } from '../post/post.service';
 import { User } from '../user/user.entity';
 import { AddBlogValidator } from './dto/blog.addBlog.dto';
-import { EditBlogValidator } from './dto/blog.editBlog.dto copy';
+import { EditBlogValidator } from './dto/blog.editBlog.dto';
 
 @Injectable()
 export class BlogService {

@@ -14,7 +14,7 @@ import { standardRes } from '../res/interface/standardRes.interface';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { BlogService } from './blog.service';
 import { AddBlogValidator } from './dto/blog.addBlog.dto';
-import { EditBlogValidator } from './dto/blog.editBlog.dto copy';
+import { EditBlogValidator } from './dto/blog.editBlog.dto';
 import { UUID } from './dto/blog.uuid.dto';
 import { CommentValidator } from './dto/blog.comment.dto';
 import { BlogCommentService } from './comment/blogComment.service';

@@ -14,19 +14,23 @@ export class UserService {
     return this.usersRepository.find();
   }
 
+  find(arg: any): Promise<User[]> {
+    return this.usersRepository.find(arg);
+  }
+
   findOne(arg: any, options?: any): Promise<User> {
     return this.usersRepository.findOne(arg, options);
   }
 
   update(arg: any, entity: User): Promise<UpdateResult> {
-    return this.usersRepository.update(arg , entity);
+    return this.usersRepository.update(arg, entity);
   }
 
   insert(user: User): Promise<InsertResult> {
     return this.usersRepository.insert(user);
   }
 
-  save(user: User): Promise<User>{
+  save(user: User): Promise<User> {
     return this.usersRepository.save(user);
   }
 
