@@ -16,32 +16,65 @@ export class BlogUserService {
     private personalService: PersonalService,
   ) {}
 
-  async getAllUserBlogs(id: string): Promise<Post[]>{
+  async getAllUserBlogs(id: string): Promise<Post[]> {
     const user = await this.userService.findOne(id);
     if (!user) throw new ConflictException('User not found');
     return await this.postService.find({ user, relations: ['author'] });
   }
 
-  async addUserData(data: UserAddDataValidator, user: User): Promise<standardRes>  {
-      //const personal: PersonalData = data;
-        console.log(await this.personalService.find({}))
-        //await this.personalService.insert({data});
+  async addUserData(
+    data: UserAddDataValidator,
+    user: User,
+  ): Promise<standardRes> {
+    const personalData: PersonalData = {
+      ...data,
+      birthDate: new Date(data.birthDate),
+    };
+    const findedUser = await this.userService.findOne({
+      user,
+      relations: ['personalData'],
+    });
+    if (!findedUser) throw new ConflictException('User not found');
+    if (user.id != findedUser.id)
+      throw new ConflictException('You can not add data for this user');
+    console.log(findedUser);
+    if (findedUser.personalData)
+      return this.updateUserData(personalData, findedUser);
+    else {
+      await this.userService.save({ ...user, personalData });
       return { message: 'success', statusCode: 201 };
+    }
+  }
+
+  async updateUserData(
+    personalData: PersonalData,
+    user: User,
+  ): Promise<standardRes> {
+    const updatedUser: User = {
+      ...user,
+      personalData: {
+        ...user.personalData,
+        ...personalData,
+      },
+    };
+    await this.userService.save(updatedUser);
+    return { message: 'success', statusCode: 200 };
+  }
+
+  async getUserData(id: string, user: User): Promise<User> {
+    const findedUser = await this.userService.findOne({
+      id,
+      relations: ['personalData'],
+    });
+    if (!findedUser) throw new ConflictException('User not found');
+    if (user.id != findedUser.id)
+      throw new ConflictException('You cannot get this data');
+    return findedUser;
+  }
+
+  async deleteUserData(id: string, user: User): Promise<standardRes> {
+    if (user.id != id) throw new ConflictException('You cannot get this data');
+    await this.personalService.remove(id);
+    return { message: 'success', statusCode: 200 };
   }
 }
-/*
-async addBlog(body: AddBlogValidator, user: User): Promise<standardRes> {
-    const post: Post = {
-      title: body.title,
-      author: user,
-      contents: body.contents,
-    };
-
-    if (await this.postService.findOne({ title: body.title }))
-      throw new ConflictException('There is already a blog with that title');
-
-    await this.postService.insert(post);
-    return { message: 'success', statusCode: 201 };
-  }
-
-*/

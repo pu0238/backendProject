@@ -20,7 +20,5 @@ const config: MysqlConnectionOptions = {
   cli: {
     migrationsDir: 'migration',
   },
-  //synchronize: nodeEnvironment === "DEVELOPMENT" ? true : false,
-  //autoLoadEntities: true,
 };
 export = config;

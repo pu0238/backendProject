@@ -8,11 +8,11 @@ import {
   
   @Entity()
   export class PersonalData {
-    @PrimaryGeneratedColumn('increment')
+    @PrimaryGeneratedColumn('uuid')
     id?: string;
   
     @Column({ type: 'varchar', length: 30 })
-    name: string;
+    firstName: string;
 
     @Column({ type: 'varchar', length: 30 })
     lastName: string;

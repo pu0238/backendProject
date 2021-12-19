@@ -1,11 +1,11 @@
-import { IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator";
+import { IsDate, IsDateString, IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator";
 
 export class UserAddDataValidator {
     @IsString()
     @IsNotEmpty()
     @MinLength(2)
     @MaxLength(30)
-    name: string;
+    firstName: string;
   
     @IsString()
     @IsNotEmpty()
@@ -21,8 +21,7 @@ export class UserAddDataValidator {
 
     @IsString()
     @IsNotEmpty()
-    @MinLength(0)
-    @MaxLength(1200)
-    birthDate: string;// dd-mm-yyyy
+    @IsDateString()
+    birthDate: string;// dd-mm-yyyy 11-12-2021
   }
   

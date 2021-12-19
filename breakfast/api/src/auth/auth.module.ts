@@ -9,7 +9,7 @@ import { JwtStrategy } from "./strategies/jwt.stretegy";
 import * as dotenv from 'dotenv';
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { RankService } from "../rank/rank.service";
-import { RankModule } from "src/rank/rank.module";
+import { RankModule } from "../rank/rank.module";
 dotenv.config();
 @Module({
   imports: [

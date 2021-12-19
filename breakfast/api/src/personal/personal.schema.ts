@@ -10,7 +10,7 @@ export const PersonalSchema = new EntitySchema<PersonalData>({
       primary: true,
       generated: true,
     },
-    name: {
+    firstName: {
       type: String,
     },
     lastName: {

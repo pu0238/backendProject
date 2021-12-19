@@ -7,6 +7,7 @@ import {
   UseGuards,
   Request,
   Put,
+  Delete,
 } from '@nestjs/common';
 import { CommentValidator } from '../blog/dto/blog.comment.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
@@ -15,6 +16,7 @@ import { BlogUserService } from '../blog/user/blogUser.service';
 import { Post as PostEntity } from '../post/post.entity';
 import { UserAddDataValidator } from './dto/user.addData.dto';
 import { standardRes } from '../res/interface/standardRes.interface';
+import { User } from './user.entity';
 
 @Controller('user')
 export class UserController {
@@ -25,16 +27,21 @@ export class UserController {
     return this.blogUserService.getAllUserBlogs(param.id);
   }
 
-  //@UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('data')
   addUserData(@Body() body: UserAddDataValidator, @Request() req: any): Promise<standardRes> {
     return this.blogUserService.addUserData(body, req.user);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Put('data')
-  editUserData(@Body() body: CommentValidator, @Request() req: any): Promise<void> {
-    return;
-    //return this.blogUserService.editUserData(body, req.user);
+  @Get('data/:id')
+  getUserData(@Param() param: UUID, @Request() req: any): Promise<User> {
+    return this.blogUserService.getUserData(param.id, req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('data/:id')
+  deleteUserData(@Param() param: UUID, @Request() req: any): Promise<standardRes> {
+    return this.blogUserService.deleteUserData(param.id, req.user);
   }
 }

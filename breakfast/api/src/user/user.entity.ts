@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 import { PersonalData } from '../personal/personal.entity';
 
@@ -25,7 +26,9 @@ export class User {
   @JoinColumn()
   rank?: Rank;
 
-  @ManyToOne(() => PersonalData, (personal) => personal.id)
+  @OneToOne(() => PersonalData, (personal) => personal.id, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   personalData?: PersonalData;
 
