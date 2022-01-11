@@ -27,7 +27,7 @@ export class User {
   rank?: Rank;
 
   @OneToOne(() => PersonalData, (personal) => personal.id, {
-    onDelete: 'CASCADE',
+    onDelete: 'SET NULL',
   })
   @JoinColumn()
   personalData?: PersonalData;

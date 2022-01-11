@@ -32,30 +32,31 @@ export class BlogUserService {
     };
     const findedUser = await this.userService.findOne({
       id: user.id,
+    }, {
+      relations: ['personalData'],
     });
     if (!findedUser) throw new ConflictException('User not found');
     if (user.id != findedUser.id)
       throw new ConflictException('You can not add data for this user');
-    if (findedUser.personalData)
-      return this.updateUserData(personalData, findedUser);
-    else {
-      await this.userService.save({ ...user, personalData });
-      return { message: 'success', statusCode: 201 };
-    }
+    if (findedUser.personalData?.id) return this.updateUserData(personalData, findedUser);
+    else return this.createUserData(personalData, findedUser);
+  }
+
+  async createUserData(
+    personalData: PersonalData,
+    user: User,
+  ): Promise<standardRes> {
+    await this.personalService.insert(personalData);
+    await this.userService.update({id: user.id}, { ...user, personalData });
+    return { message: 'success', statusCode: 200 };
   }
 
   async updateUserData(
     personalData: PersonalData,
     user: User,
   ): Promise<standardRes> {
-    const updatedUser: User = {
-      ...user,
-      personalData: {
-        ...user.personalData,
-        ...personalData,
-      },
-    };
-    await this.userService.save(updatedUser);
+    const id = user.personalData.id;
+    await this.personalService.update(id, personalData);
     return { message: 'success', statusCode: 200 };
   }
 
@@ -76,12 +77,12 @@ export class BlogUserService {
     return { message: 'success', statusCode: 200 };
   }
 
-  async getUserSelfData (user: User): Promise<User>{
+  async getUserSelfData(user: User): Promise<User> {
     const findedUser = await this.userService.findOne({
       id: user.id,
       relations: ['personalData', 'rank'],
     });
     const { password, salt, ...result } = findedUser;
-    return result
+    return result;
   }
 }

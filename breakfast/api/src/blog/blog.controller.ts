@@ -51,16 +51,6 @@ export class BlogController {
     return this.blogService.deleteBlog(param.id, req.user);
   }
 
-  @Get(':id')
-  getBlog(@Param() param: UUID): Promise<PostEntity> {
-    return this.blogService.getBlog(param.id);
-  }
-
-  @Get()
-  getAllBlogs(): Promise<PostEntity[]> {
-    return this.blogService.getAllBlogs();
-  }
-
   @UseGuards(JwtAuthGuard)
   @Post('comment')
   addComment(
@@ -85,13 +75,23 @@ export class BlogController {
     return this.blogCommentService.deleteComment(param.id, req.user);
   }
 
+  @Get('comment/:id')
+  getComment(@Param() param: UUID): Promise<Comment> {
+    return this.blogCommentService.getComment(param.id);
+  }
+
   @Get('comment')
   getAllComments(): Promise<Comment[]> {
     return this.blogCommentService.getAllComments();
   }
 
-  @Get('comment/:id')
-  getComment(@Param() param: UUID): Promise<Comment> {
-    return this.blogCommentService.getComment(param.id);
+  @Get(':id')
+  getBlog(@Param() param: UUID): Promise<PostEntity> {
+    return this.blogService.getBlog(param.id);
+  }
+
+  @Get()
+  getAllBlogs(): Promise<PostEntity[]> {
+    return this.blogService.getAllBlogs();
   }
 }

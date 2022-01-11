@@ -15,7 +15,6 @@ import { Post as PostEntity } from '../post/post.entity';
 import { UserAddDataValidator } from './dto/user.addData.dto';
 import { standardRes } from '../res/interface/standardRes.interface';
 import { User } from './user.entity';
-import { PersonalData } from 'src/personal/personal.entity';
 
 @Controller('user')
 export class UserController {
